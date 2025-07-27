@@ -1,0 +1,35 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & IDE junk
+.DS_Store
+Thumbs.db
+
+# Optional: Ignore build or dist folders if you're compiling
+dist/
+build/
+
+# Optional: Ignore coverage reports (for testing)
+coverage/
+
+# Optional: Ignore database files (if any local DB setup)
+*.sqlite
+*.sqlite3
+*.db
+
+# Ignore local settings (VSCode)
+.vscode/
