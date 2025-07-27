@@ -11,7 +11,9 @@ const shippingImageRoutes = require('./Routes/shippingImagesRoutes');
 const app = express();
 const allowedOrigins = [
     'http://localhost:3000',
-    'http://localhost:3001'
+    'http://localhost:3001',
+    'https://trendysty-dashboard.netlify.app',
+    'https://trendysty-website.netlify.app'
 ];
 
 app.use(cors({
@@ -25,26 +27,34 @@ app.use(cors({
     credentials: true
 }));
 
-
 app.use(express.json());
 
-// ⛔️ Do not use routes until after DB connects
-
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
     .then(() => {
         console.log('✅ Connected to MongoDB');
-
-        // ✅ Mount routes *after* DB connection
-        app.use('/api/items', itemRoutes);
-        app.use("/api/auth", authRoutes);
-        app.use("/api/pages", pageContentRoutes);
-        app.use('/api/shipping-images', shippingImageRoutes);
-
-        app.listen(process.env.PORT || 5000, () => {
-            console.log('🚀 Server is running');
-        });
     })
     .catch(err => console.error('❌ MongoDB connection error:', err));
+
+// Mount routes
+app.use('/api/items', itemRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/pages", pageContentRoutes);
+app.use('/api/shipping-images', shippingImageRoutes);
+
+// Health check endpoint
+app.get('/', (req, res) => {
+    res.json({ message: 'Trendysty Backend API is running!' });
+});
+
+// For local development
+if (require.main === module) {
+    app.listen(process.env.PORT || 5000, () => {
+        console.log('🚀 Server is running on port', process.env.PORT || 5000);
+    });
+}
+
+module.exports = app;
